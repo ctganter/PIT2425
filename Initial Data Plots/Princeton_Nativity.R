@@ -1,3 +1,4 @@
+# Test Comment
 library(tidycensus)
 library(tidyverse)
 library(janitor)
@@ -7,7 +8,6 @@ census_api_key("8524147f6edf7fe4b7c85681397fe5acd6993d62")
 acs_nativity <- get_acs(geography = "place",
                       state = "NJ",
                       variables = c("B05001_002", "B05001_003", "B05001_004", "B05001_005", "B05001_006"),
-                      year = 2023,
                       survey = "acs5")
 
 princeton_acs_nativity <- acs_nativity %>%
