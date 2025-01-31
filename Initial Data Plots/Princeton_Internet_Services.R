@@ -23,6 +23,9 @@ head(princeton_acs_internet)
 # Create the data for the chart
 estimates = princeton_acs_internet[['estimate']]
 
+total_households <- sum(estimates)
+internet_percentage <- estimates / total_households * 100
+
 # Sample data
 internet_sub <- data.frame(
   category = c( 
@@ -31,7 +34,7 @@ internet_sub <- data.frame(
                "Other service", 
                "Internet access without a subscription", 
                "No Internet access"),
-  estimates  # Example values for each category
+  internet_percentage  # Example values for each category
 )
 
 # Create a new variable for grouping
@@ -49,18 +52,21 @@ internet_sub$category <- factor(internet_sub$category, levels = c("Broadband suc
                                                   "No Internet access"))
 
 # Plot the stacked bar chart
-ggplot(internet_sub, aes(x = group, y = estimates, fill = category)) +
+ggplot(internet_sub, aes(x = group, y = internet_percentage, fill = category)) +
   geom_bar(stat = "identity") +
   labs(title = "Internet Subscription Breakdown in Princeton Households",
        x = "Type of Subscription",
-       y = "Number of Households") +
+       y = "Percentage of Households") +
   theme_minimal() +
   scale_fill_brewer(palette = "Set3") +  # You can change the color palette here
  # guides(fill = guide_legend(
     # Remove "Internet access without a subscription" and "No Internet access" from the legend
   #  override.aes = list(fill = c("red", "blue", "green", "purple", "pink")[1:4])
  # )) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate axis labels for readability
-
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  # Rotate axis labels for readability
+  geom_text(aes(label = round(internet_percentage, 1)), 
+            position = position_stack(vjust = 0.5), 
+            color = "black", 
+            size = 2)
 
 
